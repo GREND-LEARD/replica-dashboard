@@ -96,42 +96,42 @@ export default function Dashboard() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="text-lg font-medium text-gray-700 mb-2">Perfil</h3>
-              <div className="space-y-2">
-                <p><span className="font-medium">Nombre:</span> {userData?.name}</p>
-                <p><span className="font-medium">Email:</span> {userData?.email}</p>
-                <p><span className="font-medium">Miembro desde:</span> {userData?.createdAt}</p>
+              <h3 className="text-lg font-medium text-[#E65100] mb-2">Perfil</h3>
+              <div className="space-y-2 text-gray-900">
+                <p><span className="font-medium text-gray-900">Nombre:</span> {userData?.name}</p>
+                <p><span className="font-medium text-gray-900">Email:</span> {userData?.email}</p>
+                <p><span className="font-medium text-gray-900">Miembro desde:</span> {userData?.createdAt}</p>
               </div>
             </div>
             
             <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="text-lg font-medium text-gray-700 mb-2">Actividad reciente</h3>
-              <div className="space-y-2">
+              <h3 className="text-lg font-medium text-[#E65100] mb-2">Actividad reciente</h3>
+              <div className="space-y-2 text-gray-900">
                 <p>No hay actividad reciente</p>
               </div>
             </div>
           </div>
           
           <div className="mt-6">
-            <h3 className="text-lg font-medium text-gray-700 mb-2">Acciones rápidas</h3>
+            <h3 className="text-lg font-medium text-[#E65100] mb-2">Acciones rápidas</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Link 
                 href="/account/orders"
-                className="bg-[#FFF3E0] hover:bg-[#FFE0B2] text-[#E65100] p-4 rounded-md transition-colors duration-200 flex flex-col items-center justify-center text-center"
+                className="bg-[#FFF3E0] hover:bg-[#FFE0B2] text-[#E65100] p-4 rounded-md transition-colors duration-200 flex flex-col items-center justify-center text-center font-medium"
               >
                 <FiShoppingCart className="text-2xl mb-2" />
                 <span>Ver mis pedidos</span>
               </Link>
               <Link 
                 href="/account/favorites"
-                className="bg-[#FFF3E0] hover:bg-[#FFE0B2] text-[#E65100] p-4 rounded-md transition-colors duration-200 flex flex-col items-center justify-center text-center"
+                className="bg-[#FFF3E0] hover:bg-[#FFE0B2] text-[#E65100] p-4 rounded-md transition-colors duration-200 flex flex-col items-center justify-center text-center font-medium"
               >
                 <FiHeart className="text-2xl mb-2" />
                 <span>Ver favoritos</span>
               </Link>
               <Link 
                 href="/account/settings"
-                className="bg-[#FFF3E0] hover:bg-[#FFE0B2] text-[#E65100] p-4 rounded-md transition-colors duration-200 flex flex-col items-center justify-center text-center"
+                className="bg-[#FFF3E0] hover:bg-[#FFE0B2] text-[#E65100] p-4 rounded-md transition-colors duration-200 flex flex-col items-center justify-center text-center font-medium"
               >
                 <FiSettings className="text-2xl mb-2" />
                 <span>Editar perfil</span>

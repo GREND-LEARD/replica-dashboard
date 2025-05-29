@@ -61,11 +61,32 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Función para actualizar el perfil del usuario
+  const updateProfile = async ({ data }) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: data
+      })
+      
+      if (error) throw error
+      
+      // Actualizar el usuario en el estado
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+      
+      return { success: true }
+    } catch (error) {
+      console.error('Error al actualizar perfil:', error)
+      throw error
+    }
+  }
+
   // Valor del contexto
   const value = {
     user,
     loading,
     signOut,
+    updateProfile,
     supabase
   }
 

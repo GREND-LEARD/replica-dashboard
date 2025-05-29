@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { FiSearch, FiShoppingCart, FiUser, FiHeart, FiMenu, FiBell, FiChevronDown, FiHelpCircle, FiLogOut } from 'react-icons/fi'
 import { useAuth } from '@/context/AuthContext'
+import ShoppingCart from './ShoppingCart'
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -14,6 +15,7 @@ export default function Header() {
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [visible, setVisible] = useState(true)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
   
   // Obtener el usuario del contexto de autenticación
   const { user, signOut } = useAuth()
@@ -251,13 +253,16 @@ export default function Header() {
               </div>
               <span className={`transition-all duration-300 ${scrolled ? 'text-[10px]' : 'text-xs'}`}>Alertas</span>
             </Link>
-            <Link href="/cart" className="flex flex-col items-center text-xs hover:text-[#FFF0E6] transition-colors duration-200">
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="flex flex-col items-center text-xs hover:text-[#FFF0E6] transition-colors duration-200"
+            >
               <div className="relative">
                 <FiShoppingCart className={`transition-all duration-300 ${scrolled ? 'h-5 w-5 mb-0.5' : 'h-6 w-6 mb-1'}`} />
                 <span className="absolute -top-1 -right-1 bg-[#FFAB00] text-xs text-gray-800 font-bold rounded-full h-4 w-4 flex items-center justify-center">2</span>
               </div>
               <span className={`transition-all duration-300 ${scrolled ? 'text-[10px]' : 'text-xs'}`}>Carrito</span>
-            </Link>
+            </button>
           </motion.div>
         </div>
 
@@ -305,6 +310,11 @@ export default function Header() {
         >
           🔥 ¡Ofertas Black Friday! Hasta 80% de descuento + Envío GRATIS en pedidos +$25 🔥
         </motion.div>
+      )}
+
+      {/* Shopping Cart Sidebar */}
+      {isCartOpen && (
+        <ShoppingCart onClose={() => setIsCartOpen(false)} />
       )}
     </header>
   )
