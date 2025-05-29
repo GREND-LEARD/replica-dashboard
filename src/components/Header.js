@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { FiSearch, FiShoppingCart, FiUser, FiHeart, FiMenu, FiBell } from 'react-icons/fi'
+import { FiSearch, FiShoppingCart, FiUser, FiHeart, FiMenu, FiBell, FiChevronDown, FiHelpCircle } from 'react-icons/fi'
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -22,6 +22,51 @@ export default function Header() {
 
   return (
     <header className="bg-red-600 text-white shadow-md sticky top-0 z-50">
+      {/* Top navigation bar - NEW */}
+      <div className="bg-red-700 py-1 px-4">
+        <div className="container mx-auto flex items-center justify-between text-sm">
+          <div className="flex items-center space-x-6">
+            <Link href="/populares" className="flex items-center hover:text-orange-200 transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              Artículos más vendidos
+            </Link>
+            <Link href="/5estrellas" className="flex items-center hover:text-orange-200 transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              5 estrellas
+            </Link>
+            <Link href="/nuevo" className="hover:text-orange-200 transition-colors duration-200">
+              Lo nuevo
+            </Link>
+            <div className="relative group">
+              <button className="flex items-center hover:text-orange-200 transition-colors duration-200">
+                Categorías
+                <FiChevronDown className="ml-1 h-4 w-4" />
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center">
+              <span className="mr-2">Hola, g***41</span>
+              <Link href="/account" className="hover:text-orange-200 transition-colors duration-200">
+                Pedidos y cuenta
+              </Link>
+            </div>
+            <Link href="/help" className="hover:text-orange-200 transition-colors duration-200 flex items-center">
+              <FiHelpCircle className="mr-1 h-4 w-4" />
+              Ayuda
+            </Link>
+            <div className="flex items-center bg-yellow-500 text-black px-2 py-0.5 rounded hover:bg-yellow-400 transition-colors duration-200">
+              <span className="font-medium">ES</span>
+              <FiChevronDown className="ml-1 h-3 w-3" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Mobile menu button */}
