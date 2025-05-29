@@ -1,4 +1,4 @@
-import { createClientServer } from '@/lib/supabase'
+import { createClientServer } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export async function GET(request) {
@@ -17,4 +17,4 @@ export async function GET(request) {
 
   // URL to redirect to if the signup process fails
   return NextResponse.redirect(`${requestUrl.origin}/auth/auth-error`)
-} 
+}
