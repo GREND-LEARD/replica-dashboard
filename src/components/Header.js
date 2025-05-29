@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { FiSearch, FiShoppingCart, FiUser, FiHeart, FiMenu, FiBell, FiChevronDown, FiHelpCircle } from 'react-icons/fi'
+import { FiSearch, FiShoppingCart, FiUser, FiHeart, FiMenu, FiBell, FiChevronDown, FiHelpCircle, FiLogOut } from 'react-icons/fi'
+import { useAuth } from '@/context/AuthContext'
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -12,6 +13,39 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [visible, setVisible] = useState(true)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  
+  // Obtener el usuario del contexto de autenticación
+  const { user, signOut } = useAuth()
+
+  // Función para manejar el cierre de sesión
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      setIsUserMenuOpen(false)
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+    }
+  }
+
+  // Función para obtener el nombre de usuario para mostrar
+  const getUserDisplayName = () => {
+    if (!user) return 'Invitado'
+    
+    // Si el usuario tiene un nombre, mostrarlo
+    if (user.user_metadata && user.user_metadata.full_name) {
+      return user.user_metadata.full_name
+    }
+    
+    // Si no hay nombre, mostrar el email parcialmente oculto
+    if (user.email) {
+      const [username, domain] = user.email.split('@')
+      if (username.length <= 3) return user.email
+      return `${username.substring(0, 1)}***${username.substring(username.length - 2)}`
+    }
+    
+    return 'Usuario'
+  }
 
   // Controlar la visibilidad del header al hacer scroll
   useEffect(() => {
@@ -77,11 +111,62 @@ export default function Header() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                <span className="mr-2">Hola, g***41</span>
-                <Link href="/account" className="hover:text-[#FFF0E6] transition-colors duration-200">
-                  Pedidos y cuenta
-                </Link>
+              <div className="flex items-center relative">
+                <span className="mr-2">Hola, {getUserDisplayName()}</span>
+                <button 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="hover:text-[#FFF0E6] transition-colors duration-200 flex items-center"
+                >
+                  {user ? 'Mi cuenta' : 'Iniciar sesión'}
+                  <FiChevronDown className="ml-1 h-4 w-4" />
+                </button>
+                
+                {/* Menú desplegable de usuario */}
+                {isUserMenuOpen && (
+                  <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-50 text-gray-800">
+                    {user ? (
+                      <>
+                        <Link 
+                          href="/account/dashboard" 
+                          className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          <FiUser className="inline mr-2" /> Dashboard
+                        </Link>
+                        <Link 
+                          href="/account/orders" 
+                          className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          <FiShoppingCart className="inline mr-2" /> Mis pedidos
+                        </Link>
+                        <button 
+                          onClick={handleSignOut}
+                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 text-red-600"
+                        >
+                          <FiLogOut className="inline mr-2" /> Cerrar sesión
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link 
+                          href="/login" 
+                          className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Iniciar sesión
+                        </Link>
+                        <Link 
+                          href="/registro" 
+                          className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Crear cuenta
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
               <Link href="/help" className="hover:text-[#FFF0E6] transition-colors duration-200 flex items-center">
                 <FiHelpCircle className="mr-1 h-4 w-4" />
