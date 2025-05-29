@@ -1,238 +1,491 @@
 'use client'
 
-import Header from '@/components/Header'
+import Link from 'next/link'
+import Image from 'next/image'
 import ProductCard from '@/components/ProductCard'
-import CategoryNav from '@/components/CategoryNav'
-import Footer from '@/components/Footer'
-import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+import { useState, useEffect } from 'react'
 
-// Datos de ejemplo para desarrollo
+// Productos de ejemplo
 const productosEjemplo = [
   {
     id: 1,
-    nombre: "Auriculares Bluetooth Inalámbricos",
-    descripcion: "Auriculares con cancelación de ruido, resistentes al agua y larga duración de batería",
-    precio: 29.99,
-    imagen_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-    original_price: 39.99,
-    discount_percentage: 25,
-    sales_count: 1245,
-    categorias: { nombre: "Electrónica" }
+    nombre: 'Auriculares Bluetooth',
+    precio: 19.99,
+    precioAnterior: 39.99,
+    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 1200,
+    descuento: 50,
+    envioGratis: true,
   },
   {
     id: 2,
-    nombre: "Vestido de Verano Floral",
-    descripcion: "Vestido ligero con estampado floral, perfecto para el verano",
-    precio: 19.50,
-    imagen_url: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=300&h=300&fit=crop",
-    original_price: 35.00,
-    discount_percentage: 44,
-    sales_count: 879,
-    categorias: { nombre: "Moda de Mujer" }
+    nombre: 'Smartwatch Deportivo',
+    precio: 29.99,
+    precioAnterior: 49.99,
+    imagen: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2R1Y3R8ZW58MHx8MHx8fDA%3D',
+    ventas: 890,
+    descuento: 40,
+    envioGratis: true,
   },
   {
     id: 3,
-    nombre: "Organizador de Maquillaje",
-    descripcion: "Organizador de acrílico transparente con múltiples compartimentos",
+    nombre: 'Cargador Inalámbrico',
     precio: 15.99,
-    imagen_url: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=300&h=300&fit=crop",
-    original_price: 24.99,
-    discount_percentage: 36,
-    sales_count: 567,
-    categorias: { nombre: "Belleza y Salud" }
+    precioAnterior: 24.99,
+    imagen: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2hhcmdlcnxlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 560,
+    descuento: 36,
+    envioGratis: false,
   },
   {
     id: 4,
-    nombre: "Camiseta Deportiva Hombre",
-    descripcion: "Camiseta transpirable de secado rápido para entrenamiento",
-    precio: 12.99,
-    imagen_url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop",
-    original_price: 18.99,
-    discount_percentage: 32,
-    sales_count: 423,
-    categorias: { nombre: "Moda de Hombre" }
+    nombre: 'Funda de Silicona para iPhone',
+    precio: 9.99,
+    precioAnterior: 14.99,
+    imagen: 'https://images.unsplash.com/photo-1541447271487-09612b3f49f7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBob25lJTIwY2FzZXxlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 1500,
+    descuento: 33,
+    envioGratis: false,
   },
   {
     id: 5,
-    nombre: "Lámpara LED de Escritorio",
-    descripcion: "Lámpara con control táctil, 3 modos de luz y puerto USB",
-    precio: 24.50,
-    imagen_url: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=300&h=300&fit=crop",
-    original_price: 32.99,
-    discount_percentage: 26,
-    sales_count: 298,
-    categorias: { nombre: "Hogar y Jardín" }
+    nombre: 'Lámpara LED de Escritorio',
+    precio: 24.99,
+    precioAnterior: 39.99,
+    imagen: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGFtcHxlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 320,
+    descuento: 38,
+    envioGratis: true,
   },
   {
     id: 6,
-    nombre: "Peluche Oso de Felpa",
-    descripcion: "Oso de peluche suave de 40cm, ideal para regalo",
-    precio: 18.75,
-    imagen_url: "https://images.unsplash.com/photo-1559715541-5daf8a0296d0?w=300&h=300&fit=crop",
-    original_price: 25.00,
-    discount_percentage: 25,
-    sales_count: 187,
-    categorias: { nombre: "Juguetes" }
+    nombre: 'Mochila Impermeable',
+    precio: 32.99,
+    precioAnterior: 45.99,
+    imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFja3BhY2t8ZW58MHx8MHx8fDA%3D',
+    ventas: 750,
+    descuento: 28,
+    envioGratis: true,
   },
   {
     id: 7,
-    nombre: "Botella de Agua Deportiva",
-    descripcion: "Botella de acero inoxidable, mantiene bebidas frías por 24h",
-    precio: 14.99,
-    imagen_url: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=300&h=300&fit=crop",
-    original_price: 22.99,
-    discount_percentage: 35,
-    sales_count: 356,
-    categorias: { nombre: "Deportes" }
+    nombre: 'Teclado Mecánico RGB',
+    precio: 49.99,
+    precioAnterior: 79.99,
+    imagen: 'https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8a2V5Ym9hcmR8ZW58MHx8MHx8fDA%3D',
+    ventas: 420,
+    descuento: 38,
+    envioGratis: true,
   },
   {
     id: 8,
-    nombre: "Smartwatch Resistente al Agua",
-    descripcion: "Reloj inteligente con monitor cardíaco y notificaciones",
-    precio: 45.99,
-    imagen_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-    original_price: 69.99,
-    discount_percentage: 34,
-    sales_count: 789,
-    categorias: { nombre: "Electrónica" }
+    nombre: 'Botella de Agua Térmica',
+    precio: 18.99,
+    precioAnterior: 27.99,
+    imagen: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2F0ZXIlMjBib3R0bGV8ZW58MHx8MHx8fDA%3D',
+    ventas: 980,
+    descuento: 32,
+    envioGratis: false,
   },
   {
     id: 9,
-    nombre: "Bolso Bandolera de Cuero",
-    descripcion: "Bolso elegante con múltiples compartimentos y correa ajustable",
-    precio: 32.50,
-    imagen_url: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300&h=300&fit=crop",
-    original_price: 49.99,
-    discount_percentage: 35,
-    sales_count: 245,
-    categorias: { nombre: "Moda de Mujer" }
+    nombre: 'Zapatillas Deportivas',
+    precio: 59.99,
+    precioAnterior: 89.99,
+    imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D',
+    ventas: 1100,
+    descuento: 33,
+    envioGratis: true,
   },
   {
     id: 10,
-    nombre: "Set de Sartenes Antiadherentes",
-    descripcion: "Juego de 3 sartenes con revestimiento antiadherente",
-    precio: 38.75,
-    imagen_url: "https://images.unsplash.com/photo-1585837575652-267cbc187fc3?w=300&h=300&fit=crop",
-    original_price: 59.99,
-    discount_percentage: 35,
-    sales_count: 178,
-    categorias: { nombre: "Hogar y Jardín" }
+    nombre: 'Organizador de Escritorio',
+    precio: 22.99,
+    precioAnterior: 29.99,
+    imagen: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGVzayUyMG9yZ2FuaXplcnxlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 340,
+    descuento: 23,
+    envioGratis: false,
   },
   {
     id: 11,
-    nombre: "Zapatillas Running Hombre",
-    descripcion: "Zapatillas ligeras con amortiguación y suela antideslizante",
-    precio: 42.99,
-    imagen_url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
-    original_price: 64.99,
-    discount_percentage: 34,
-    sales_count: 432,
-    categorias: { nombre: "Deportes" }
+    nombre: 'Altavoz Bluetooth Portátil',
+    precio: 39.99,
+    precioAnterior: 59.99,
+    imagen: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ymx1ZXRvb3RoJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 670,
+    descuento: 33,
+    envioGratis: true,
   },
   {
     id: 12,
-    nombre: "Crema Hidratante Facial",
-    descripcion: "Crema con ácido hialurónico y vitamina E para todo tipo de piel",
-    precio: 16.50,
-    imagen_url: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=300&h=300&fit=crop",
-    original_price: 24.99,
-    discount_percentage: 34,
-    sales_count: 567,
-    categorias: { nombre: "Belleza y Salud" }
-  }
-]
+    nombre: 'Set de Pinceles de Maquillaje',
+    precio: 14.99,
+    precioAnterior: 24.99,
+    imagen: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFrZXVwJTIwYnJ1c2hlc3xlbnwwfHwwfHx8MA%3D%3D',
+    ventas: 890,
+    descuento: 40,
+    envioGratis: false,
+  },
+];
+
+// Categorías de ejemplo
+const categorias = [
+  { id: 1, nombre: 'Electrónica', icono: '📱' },
+  { id: 2, nombre: 'Hogar', icono: '🏠' },
+  { id: 3, nombre: 'Moda', icono: '👕' },
+  { id: 4, nombre: 'Belleza', icono: '💄' },
+  { id: 5, nombre: 'Deportes', icono: '⚽' },
+  { id: 6, nombre: 'Juguetes', icono: '🧸' },
+  { id: 7, nombre: 'Mascotas', icono: '🐶' },
+  { id: 8, nombre: 'Jardín', icono: '🌱' },
+  { id: 9, nombre: 'Libros', icono: '📚' },
+  { id: 10, nombre: 'Cocina', icono: '🍳' },
+];
 
 export default function Home() {
-  // Por ahora usamos los datos de ejemplo en lugar de cargar de Supabase
-  const [products] = useState(productosEjemplo)
-  const [loading] = useState(false)
-  const [error] = useState(null)
+  const [ref, inView] = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
+  });
 
-  // Usamos los datos de ejemplo para las secciones
-  const flashDealsProducts = products.slice(0, 8)
-  const mainProducts = products.slice(0) // Mostramos todos los productos en la sección principal
+  const [bannerIndex, setBannerIndex] = useState(0);
+  const banners = [
+    '/banners/moda-banner.jpg',
+    '/banners/electronica-banner.jpg',
+    '/banners/hogar-banner.jpg'
+  ];
 
-  if (loading) {
-    return <p className="text-center mt-8">Cargando productos...</p>
-  }
+  // Cambiar banner automáticamente cada 5 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-  if (error) {
-    return <p className="text-center text-red-500 mt-8">{error}</p>
-  }
+  // Variantes para animaciones
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100
+      }
+    }
+  };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col">
-      <Header />
-      <CategoryNav />
+    <main className="min-h-screen bg-gray-50">
+      {/* Banner principal */}
+      <div className="relative overflow-hidden h-48 sm:h-64 md:h-80 bg-gray-200">
+        <motion.div 
+          className="w-full h-full relative"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {banners.map((banner, index) => (
+            <motion.div
+              key={index}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ 
+                opacity: bannerIndex === index ? 1 : 0,
+                zIndex: bannerIndex === index ? 10 : 1 
+              }}
+              transition={{ duration: 0.8 }}
+            >
+              <Image 
+                src={banner} 
+                alt={`Banner promocional ${index + 1}`} 
+                fill 
+                style={{ objectFit: 'cover' }} 
+                priority={index === 0}
+              />
+            </motion.div>
+          ))}
+          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+            <motion.div 
+              className="text-center text-white px-4"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <h1 className="text-2xl md:text-4xl font-bold mb-2 drop-shadow-lg">¡Ofertas Black Friday!</h1>
+              <p className="text-lg md:text-xl mb-4 drop-shadow-md">Hasta 80% de descuento en miles de productos</p>
+              <motion.button 
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Ver ofertas
+              </motion.button>
+            </motion.div>
+          </div>
+        </motion.div>
+        
+        {/* Indicadores del banner */}
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+          {banners.map((_, index) => (
+            <motion.button
+              key={index}
+              className={`h-2 rounded-full ${bannerIndex === index ? 'w-6 bg-red-600' : 'w-2 bg-white bg-opacity-60'}`}
+              onClick={() => setBannerIndex(index)}
+              whileHover={{ scale: 1.2 }}
+              transition={{ duration: 0.2 }}
+            />
+          ))}
+        </div>
+      </div>
 
-      {/* Temu-like Hero/Banner Section - Styled based on the Black Friday image */}
-      {/* This section would ideally be a dynamic carousel or distinct promotional blocks */}
-      <section className="bg-gradient-to-b from-red-700 to-red-900 text-white py-12 md:py-20 relative overflow-hidden border-b-4 border-orange-400">
-        {/* Background elements (simplified placeholders) */}
-        <div className="absolute inset-0 z-0 opacity-30" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/confetti-transparent.png')", backgroundSize: 'cover' }}></div>
-         {/* More specific background elements like large bokeh/circles would require actual image assets or complex CSS/SVG */}
+      {/* Categorías */}
+      <motion.section 
+        className="py-6 bg-white"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="container mx-auto px-4">
+          <h2 className="text-xl font-bold mb-4">Categorías populares</h2>
+          <motion.div 
+            className="grid grid-cols-5 md:grid-cols-10 gap-2"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {categorias.map((categoria) => (
+              <motion.div 
+                key={categoria.id} 
+                className="flex flex-col items-center p-2 hover:bg-gray-50 rounded-lg transition-colors duration-200 cursor-pointer"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05, backgroundColor: '#f9fafb' }}
+              >
+                <span className="text-2xl mb-1">{categoria.icono}</span>
+                <span className="text-xs text-center">{categoria.nombre}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
 
-        <div className="container mx-auto text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-extrabold mb-2 animate-fade-in-down drop-shadow-lg">AHORRA EN GRANDE</h2>
-          <h3 className="text-2xl md:text-4xl font-bold mb-8 animate-fade-in-up text-orange-300 drop-shadow-lg">EN LA <span className="text-orange-400">SEMANA BLACK</span></h3>
+      {/* Banner promocional */}
+      <motion.section 
+        className="py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-between">
+            <motion.div 
+              className="flex-1 min-w-[200px] mb-4 md:mb-0"
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-xl font-bold mb-1">¡Envío gratis en tu primer pedido!</h3>
+              <p className="text-sm">En pedidos superiores a $15</p>
+            </motion.div>
+            <div className="flex space-x-4">
+              <motion.div 
+                className="flex items-center bg-white bg-opacity-20 rounded-lg p-3"
+                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+              >
+                <Image src="https://images.unsplash.com/photo-1612837017391-4b6b7b0b2b0b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdpZnR8ZW58MHx8MHx8fDA%3D" alt="Regalo" width={80} height={80} className="mr-3 rounded" />
+                <div>
+                  <p className="font-bold">Cupón de $5</p>
+                  <p className="text-xs">Para nuevos usuarios</p>
+                </div>
+              </motion.div>
+              <motion.div 
+                className="flex items-center bg-white bg-opacity-20 rounded-lg p-3"
+                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+              >
+                <Image src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2lmdHxlbnwwfHwwfHx8MA%3D%3D" alt="Regalo" width={80} height={80} className="mr-3 rounded" />
+                <div>
+                  <p className="font-bold">15% descuento</p>
+                  <p className="text-xs">En tu próxima compra</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </motion.section>
 
-          {/* Placeholder for dynamic banner images or content - could be carousels or specific promotions */}
-           {/* Replace with a dedicated Banner Carousel component later (needs Client Component) */}
-           <div className="mt-8 flex justify-center items-center space-x-4 md:space-x-8 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
-               {/* Imágenes de banner reales */}
-               <img src="/banners/moda-banner.jpg" alt="Banner Moda" className="rounded-lg shadow-lg flex-shrink-0 w-4/5 md:w-1/3 max-w-sm" />
-               <img src="/banners/electronica-banner.jpg" alt="Banner Electronica" className="rounded-lg shadow-lg flex-shrink-0 w-4/5 md:w-1/3 max-w-sm" />
-               <img src="/banners/hogar-banner.jpg" alt="Banner Hogar" className="rounded-lg shadow-lg flex-shrink-0 w-4/5 md:w-1/3 max-w-sm" />
-           </div>
-           {/* Placeholder for Call to Action Button */}
-            <button className="mt-10 px-8 py-3 bg-orange-500 text-white text-xl font-bold rounded-full shadow-lg hover:bg-orange-600 transition duration-300 animate-pulse">{'COMPRA YA >'}</button>
-           {/* Add more visual elements like gift boxes, sparks etc. using absolute positioning and images/SVGs */}
-            {/* Placeholder gift box 1 */}
-            <img src="https://via.placeholder.com/80x80?text=Gift" alt="Gift Box" className="absolute bottom-10 left-5 md:left-10 w-16 h-16 md:w-20 md:h-20 object-contain transform rotate-12 opacity-90 hidden sm:block" />
-             {/* Placeholder gift box 2 */}
-            <img src="https://via.placeholder.com/80x80?text=Gift" alt="Gift Box" className="absolute top-10 right-5 md:right-10 w-14 h-14 md:w-16 md:h-16 object-contain transform -rotate-6 opacity-90 hidden sm:block" />
-
+      {/* Productos destacados */}
+      <section className="py-8 bg-gray-50" ref={ref}>
+        <div className="container mx-auto px-4">
+          <motion.div 
+            className="flex justify-between items-center mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl font-bold">Productos destacados</h2>
+            <Link href="/products" className="text-red-600 hover:text-red-700 font-medium">Ver todos</Link>
+          </motion.div>
+          
+          <motion.div 
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+          >
+            {productosEjemplo.map((producto, index) => (
+              <motion.div 
+                key={producto.id}
+                variants={itemVariants}
+                custom={index}
+              >
+                <ProductCard producto={producto} />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Temu-like Info Bar */}
-      <section className="bg-green-600 text-white py-2.5 shadow-md">
-         <div className="container mx-auto flex flex-wrap items-center justify-around text-sm text-center">
-            <span className="flex items-center justify-center w-1/2 md:w-auto mb-2 md:mb-0"><span className="mr-1 text-lg">✅</span> ¿Por qué elegir RepliTemu?</span>
-            <span className="flex items-center justify-center w-1/2 md:w-auto mb-2 md:mb-0"><span className="mr-1 text-lg">🔒</span> Privacidad segura</span>
-            <span className="flex items-center justify-center w-1/2 md:w-auto"><span className="mr-1 text-lg">💳</span> Pagos seguros</span>
-            <span className="flex items-center justify-center w-1/2 md:w-auto"><span className="mr-1 text-lg">🚚</span> Entrega garantizada</span>
-            <span className="flex items-center cursor-pointer hover:underline">Ver <span className="ml-1">→</span></span>
-         </div>
-      </section>
+      {/* Sección de ventajas */}
+      <motion.section 
+        className="py-8 bg-white"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-6 text-center">¿Por qué comprar en RepliTemu?</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div 
+              className="bg-gray-50 p-6 rounded-lg text-center"
+              whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="text-4xl mb-4 text-red-600 mx-auto">🚚</div>
+              <h3 className="text-xl font-bold mb-2">Envío rápido</h3>
+              <p className="text-gray-600">Entrega en 24-48 horas en pedidos realizados antes de las 17:00</p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-gray-50 p-6 rounded-lg text-center"
+              whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="text-4xl mb-4 text-red-600 mx-auto">💰</div>
+              <h3 className="text-xl font-bold mb-2">Mejores precios</h3>
+              <p className="text-gray-600">Garantizamos los precios más bajos del mercado en todos nuestros productos</p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-gray-50 p-6 rounded-lg text-center"
+              whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <div className="text-4xl mb-4 text-red-600 mx-auto">⭐</div>
+              <h3 className="text-xl font-bold mb-2">Calidad garantizada</h3>
+              <p className="text-gray-600">Todos nuestros productos pasan por estrictos controles de calidad</p>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
 
-      {/* Temu-like Flash Deals Section */}
-      {flashDealsProducts.length > 0 && (
-       <section className="container mx-auto mt-6 px-4">
-           <h2 className="text-2xl font-bold mb-4 text-gray-800">✨ Ofertas relámpago <span className="text-orange-500 font-semibold text-lg">Por tiempo limitado</span></h2>
-           {/* This grid could also be a horizontal scrollable list for a more Temu-like feel on mobile */}
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-               {/* Map flash deals products here */} 
-               {flashDealsProducts.map((product) => (
-                 <ProductCard key={`flash-${product.id}`} product={product} />
-               ))}
-           </div>
-       </section>
-        )}
-
-      {/* Main Products Grid */}
-       {mainProducts.length > 0 && (
-         <div className="container mx-auto p-4 mt-4 flex-grow">
-           <h2 className="text-2xl font-bold mb-4 text-gray-800">Productos populares</h2>
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-             {mainProducts.map((product) => (
-               <ProductCard key={product.id} product={product} />
-             ))}
-           </div>
-         </div>
-       )}
-
-      <Footer />
-    </div>
+      {/* Footer con newsletter */}
+      <motion.footer 
+        className="bg-gray-800 text-white py-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <motion.div
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <h3 className="text-xl font-bold mb-4">¡Suscríbete a nuestra newsletter!</h3>
+              <p className="mb-4 text-gray-300">Recibe las mejores ofertas y novedades directamente en tu email.</p>
+              
+              <form className="flex">
+                <input 
+                  type="email" 
+                  placeholder="Tu email" 
+                  className="flex-grow px-4 py-2 rounded-l-lg focus:outline-none text-gray-800" 
+                />
+                <motion.button 
+                  type="submit" 
+                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-r-lg font-medium transition-colors duration-200"
+                  whileHover={{ backgroundColor: '#e53e3e' }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Suscribirse
+                </motion.button>
+              </form>
+            </motion.div>
+            
+            <motion.div 
+              className="grid grid-cols-2 gap-4"
+              initial={{ x: 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div>
+                <h4 className="font-bold mb-4">Enlaces rápidos</h4>
+                <ul className="space-y-2">
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Sobre nosotros</Link></li>
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Contacto</Link></li>
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Ayuda & FAQ</Link></li>
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Política de privacidad</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-bold mb-4">Categorías</h4>
+                <ul className="space-y-2">
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Electrónica</Link></li>
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Moda</Link></li>
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Hogar</Link></li>
+                  <li><Link href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Belleza</Link></li>
+                </ul>
+              </div>
+            </motion.div>
+          </div>
+          
+          <motion.div 
+            className="pt-6 mt-6 border-t border-gray-700 text-center text-gray-400 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <p>© 2023 RepliTemu. Todos los derechos reservados.</p>
+          </motion.div>
+        </div>
+      </motion.footer>
+    </main>
   )
 }
