@@ -313,55 +313,35 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Banner principal */}
-      <div className="relative overflow-hidden h-48 sm:h-64 md:h-80 bg-gray-200">
-        <motion.div 
-          className="w-full h-full relative"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {banners.map((banner, index) => (
-            <motion.div
-              key={index}
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ 
-                opacity: bannerIndex === index ? 1 : 0,
-                zIndex: bannerIndex === index ? 10 : 1 
-              }}
-              transition={{ duration: 0.8 }}
+      <div className="relative overflow-hidden h-48 sm:h-64 md:h-80">
+        <Image
+          src="/blackfriday.jpeg"
+          alt="Fondo Black Friday"
+          fill
+          style={{ objectFit: 'cover' }}
+          className="z-0"
+          priority
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center z-10">
+          <motion.div 
+            className="text-center text-white px-4"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <Image
-                src={banner} 
-                alt={`Banner promocional ${index + 1}`} 
-                fill 
-                style={{ objectFit: 'cover' }} 
-                priority={index === 0}
-              />
-            </motion.div>
-          ))}
-          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-            <motion.div 
-              className="text-center text-white px-4"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+            <h1 className="text-2xl md:text-4xl font-bold mb-2 drop-shadow-lg">¡Ofertas Black Friday!</h1>
+            <p className="text-lg md:text-xl mb-4 drop-shadow-md">Hasta 80% de descuento en miles de productos</p>
+            <motion.button 
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <h1 className="text-2xl md:text-4xl font-bold mb-2 drop-shadow-lg">¡Ofertas Black Friday!</h1>
-              <p className="text-lg md:text-xl mb-4 drop-shadow-md">Hasta 80% de descuento en miles de productos</p>
-              <motion.button 
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Ver ofertas
-              </motion.button>
-            </motion.div>
-          </div>
-        </motion.div>
-        
+              Ver ofertas
+            </motion.button>
+          </motion.div>
+        </div>
         {/* Indicadores del banner */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 z-20">
           {banners.map((_, index) => (
             <motion.button
               key={index}
