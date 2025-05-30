@@ -538,9 +538,86 @@ export default function ProductDetail({ params }) {
     setColorSeleccionado(color);
   };
 
-  const handleAddToCart = () => {
-    // Aquí iría la lógica para añadir al carrito
-    alert(`Añadido al carrito: ${cantidad} unidades de ${producto.nombre} en color ${colorSeleccionado}`);
+  const handleAddToCart = async () => {
+    if (!user) {
+      alert('Debes iniciar sesión para añadir productos al carrito.');
+      router.push('/login');
+      return;
+    }
+
+    setLoading(true); // Opcional: mostrar estado de carga
+    const productIntId = parseInt(productId);
+
+    try {
+      // 1. Buscar o crear el carrito del usuario
+      let { data: carrito, error: fetchCartError } = await supabase
+        .from('carritos')
+        .select('id')
+        .eq('usuario_id', user.id)
+        .single();
+
+      if (fetchCartError && fetchCartError.code !== 'PGRST116') { // PGRST116: no rows found
+        throw fetchCartError;
+      }
+
+      if (!carrito) {
+        // Si no existe, crear un nuevo carrito para el usuario
+        const { data: newCarrito, error: createCartError } = await supabase
+          .from('carritos')
+          .insert([{ usuario_id: user.id }])
+          .select()
+          .single();
+
+        if (createCartError) throw createCartError;
+        carrito = newCarrito;
+      }
+
+      // 2. Buscar si el producto ya está en el carrito
+      const { data: existingItem, error: fetchItemError } = await supabase
+        .from('items_carrito')
+        .select('id, cantidad')
+        .eq('carrito_id', carrito.id)
+        .eq('producto_id', productIntId)
+        //.eq('variacion_id', selectedVariationId) // Si tuviéramos variaciones seleccionadas
+        .single();
+
+      if (fetchItemError && fetchItemError.code !== 'PGRST116') {
+        throw fetchItemError;
+      }
+
+      if (existingItem) {
+        // Si el item ya existe, actualizar la cantidad
+        const newCantidad = existingItem.cantidad + cantidad;
+        const { error: updateItemError } = await supabase
+          .from('items_carrito')
+          .update({ cantidad: newCantidad })
+          .eq('id', existingItem.id);
+
+        if (updateItemError) throw updateItemError;
+        alert('Cantidad del producto actualizada en el carrito.');
+      } else {
+        // Si el item no existe, insertarlo
+        const { error: insertItemError } = await supabase
+          .from('items_carrito')
+          .insert([
+            { 
+              carrito_id: carrito.id, 
+              producto_id: productIntId, 
+              cantidad: cantidad 
+              // variacion_id: selectedVariationId // Si tuviéramos variaciones seleccionadas
+            }
+          ]);
+
+        if (insertItemError) throw insertItemError;
+        alert('Producto añadido al carrito.');
+      }
+
+    } catch (error) {
+      console.error('Error al añadir producto al carrito:', error);
+      alert('Hubo un error al añadir el producto al carrito.' + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleToggleFavorite = async () => {

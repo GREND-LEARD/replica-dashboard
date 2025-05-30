@@ -269,8 +269,8 @@ export default function Home() {
                 zIndex: bannerIndex === index ? 10 : 1 
               }}
               transition={{ duration: 0.8 }}
-            >
-              <Image 
+          >
+            <Image
                 src={banner} 
                 alt={`Banner promocional ${index + 1}`} 
                 fill 
@@ -544,7 +544,7 @@ export default function Home() {
           >
             <p>© 2023 RepliTemu. Todos los derechos reservados.</p>
           </motion.div>
-        </div>
+    </div>
       </motion.footer>
     </main>
   )
