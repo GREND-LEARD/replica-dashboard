@@ -1,42 +1,334 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import Link from 'next/link'
 import Image from 'next/image'
-import { FiUser, FiShoppingCart, FiHeart, FiSettings, FiLogOut, FiTrash2, FiShoppingBag } from 'react-icons/fi'
+import { FiUser, FiShoppingCart, FiHeart, FiSettings, FiLogOut, FiTrash2, FiShoppingBag, FiStar } from 'react-icons/fi'
+import { motion } from 'framer-motion'
+import supabase from '@/lib/supabase'
+
+// Importar la lista de productos de ejemplo (debe ser la misma que en page.js y product/[productId]/page.js)
+// Idealmente, esto vendría de una fuente centralizada o una API, pero para el propósito del demo usamos el array hardcodeado.
+const productosEjemplo = [
+  {
+    id: 1,
+    nombre: 'Auriculares Bluetooth',
+    precio: 19.99,
+    precioAnterior: 39.99,
+    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=60',
+    ventas: 1200,
+    descuento: 50,
+    envioGratis: true,
+    calificacion: 4.5,
+    opiniones: 328
+  },
+  {
+    id: 2,
+    nombre: 'Smartwatch Deportivo',
+    precio: 29.99,
+    precioAnterior: 49.99,
+    imagen: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=60',
+    ventas: 890,
+    descuento: 40,
+    envioGratis: true,
+    calificacion: 4.3,
+    opiniones: 245
+  },
+  {
+    id: 3,
+    nombre: 'Cargador Inalámbrico',
+    precio: 15.99,
+    precioAnterior: 24.99,
+    imagen: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=500&q=60',
+    ventas: 560,
+    descuento: 36,
+    envioGratis: false,
+    calificacion: 4.0,
+    opiniones: 180
+  },
+  {
+    id: 4,
+    nombre: 'Funda de Silicona para iPhone',
+    precio: 9.99,
+    precioAnterior: 14.99,
+    imagen: 'https://images.unsplash.com/photo-1585060544211-7ad8b450a730?auto=format&fit=crop&w=500&q=60',
+    ventas: 1500,
+    descuento: 33,
+    envioGratis: false,
+    calificacion: 4.7,
+    opiniones: 450
+  },
+  {
+    id: 5,
+    nombre: 'Lámpara LED de Escritorio',
+    precio: 24.99,
+    precioAnterior: 39.99,
+    imagen: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=500&q=60',
+    ventas: 320,
+    descuento: 38,
+    envioGratis: true,
+    calificacion: 4.2,
+    opiniones: 120
+  },
+  {
+    id: 6,
+    nombre: 'Mochila Impermeable',
+    precio: 32.99,
+    precioAnterior: 45.99,
+    imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=60',
+    ventas: 750,
+    descuento: 28,
+    envioGratis: true,
+    calificacion: 4.6,
+    opiniones: 280
+  },
+  {
+    id: 7,
+    nombre: 'Teclado Mecánico RGB',
+    precio: 49.99,
+    precioAnterior: 79.99,
+    imagen: 'https://images.unsplash.com/photo-1616400619175-5bd4f5c83367?auto=format&fit=crop&w=500&q=60',
+    ventas: 420,
+    descuento: 38,
+    envioGratis: true,
+    calificacion: 4.5,
+    opiniones: 150
+  },
+  {
+    id: 8,
+    nombre: 'Botella de Agua Térmica',
+    precio: 18.99,
+    precioAnterior: 27.99,
+    imagen: 'https://images.unsplash.com/photo-1591090504758-d99f363a80c8?auto=format&fit=crop&w=500&q=60',
+    ventas: 980,
+    descuento: 32,
+    envioGratis: false,
+    calificacion: 4.8,
+    opiniones: 510
+  },
+  {
+    id: 9,
+    nombre: 'Zapatillas Deportivas',
+    precio: 59.99,
+    precioAnterior: 89.99,
+    imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=60',
+    ventas: 1100,
+    descuento: 33,
+    envioGratis: true,
+    calificacion: 4.7,
+    opiniones: 620
+  },
+  {
+    id: 10,
+    nombre: 'Organizador de Escritorio',
+    precio: 22.99,
+    precioAnterior: 29.99,
+    imagen: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=60',
+    ventas: 340,
+    descuento: 23,
+    envioGratis: false,
+    calificacion: 4.1,
+    opiniones: 90
+  },
+  {
+    id: 11,
+    nombre: 'Altavoz Bluetooth Portátil',
+    precio: 39.99,
+    precioAnterior: 59.99,
+    imagen: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=60',
+    ventas: 670,
+    descuento: 33,
+    envioGratis: true,
+    calificacion: 4.4,
+    opiniones: 210
+  },
+  {
+    id: 12,
+    nombre: 'Set de Pinceles de Maquillaje',
+    precio: 14.99,
+    precioAnterior: 24.99,
+    imagen: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=500&q=60',
+    ventas: 890,
+    descuento: 40,
+    envioGratis: false,
+    calificacion: 4.6,
+    opiniones: 350
+  },
+  {
+    id: 13,
+    nombre: 'Silla Ergonómica de Oficina',
+    precio: 120.00,
+    precioAnterior: 180.00,
+    imagen: 'https://images.unsplash.com/photo-1591090504758-d99f363a80c8?auto=format&fit=crop&w=500&q=60',
+    ventas: 250,
+    descuento: 33,
+    envioGratis: true,
+    calificacion: 4.3,
+    opiniones: 110
+  },
+  {
+    id: 14,
+    nombre: 'Mesa Auxiliar de Noche',
+    precio: 55.00,
+    precioAnterior: 75.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 180,
+    descuento: 27,
+    envioGratis: false,
+    calificacion: 4.0,
+    opiniones: 75
+  },
+  {
+    id: 15,
+    nombre: 'Kit de Herramientas Esencial',
+    precio: 40.00,
+    precioAnterior: 60.00,
+    imagen: 'https://images.unsplash.com/photo-1600966294595-61f5297571e1?auto=format&fit=crop&w=500&q=60',
+    ventas: 310,
+    descuento: 33,
+    envioGratis: true,
+    calificacion: 4.5,
+    opiniones: 140
+  },
+  {
+    id: 16,
+    nombre: 'Juego de Sartenes Antiadherentes',
+    precio: 75.00,
+    precioAnterior: 100.00,
+    imagen: 'https://images.unsplash.com/photo-1610741095148-558656307dfc?auto=format&fit=crop&w=500&q=60',
+    ventas: 450,
+    descuento: 25,
+    envioGratis: true,
+    calificacion: 4.6,
+    opiniones: 200
+  },
+  {
+    id: 17,
+    nombre: 'Set de Cuchillos de Cocina Profesionales',
+    precio: 60.00,
+    precioAnterior: 80.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 290,
+    descuento: 25,
+    envioGratis: true,
+    calificacion: 4.4,
+    opiniones: 130
+  },
+  {
+    id: 18,
+    nombre: 'Tabla de Cortar de Bambú',
+    precio: 25.00,
+    precioAnterior: 35.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 520,
+    descuento: 28,
+    envioGratis: false,
+    calificacion: 4.7,
+    opiniones: 190
+  },
+  {
+    id: 19,
+    nombre: 'Soporte para Laptop Ajustable',
+    precio: 30.00,
+    precioAnterior: 40.00,
+    imagen: 'https://images.unsplash.com/photo-1593642632823-02e7900c4988?auto=format&fit=crop&w=500&q=60',
+    ventas: 150,
+    descuento: 25,
+    envioGratis: false,
+    calificacion: 4.4,
+    opiniones: 80
+  },
+  {
+    id: 20,
+    nombre: 'Webcam Full HD 1080p',
+    precio: 45.00,
+    precioAnterior: 60.00,
+    imagen: 'https://images.unsplash.com/photo-1564468960512-71a50f303b31?auto=format&fit=crop&w=500&q=60',
+    ventas: 200,
+    descuento: 25,
+    envioGratis: true,
+    calificacion: 4.2,
+    opiniones: 70
+  },
+  {
+    id: 21,
+    nombre: 'Ratón Inalámbrico Ergonómico',
+    precio: 20.00,
+    precioAnterior: 30.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 300,
+    descuento: 33,
+    envioGratis: false,
+    calificacion: 4.5,
+    opiniones: 110
+  },
+];
 
 export default function Favorites() {
   const { user, signOut } = useAuth()
-  const [favorites, setFavorites] = useState([
-    {
-      id: 1,
-      name: 'Smartphone XYZ Pro Max',
-      price: 299.99,
-      rating: 4.8,
-      reviews: 245,
-      image: '/images/placeholder.jpg'
-    },
-    {
-      id: 2,
-      name: 'Auriculares Bluetooth Premium',
-      price: 89.99,
-      rating: 4.5,
-      reviews: 187,
-      image: '/images/placeholder.jpg'
-    },
-    {
-      id: 3,
-      name: 'Smartwatch Serie 5',
-      price: 159.99,
-      rating: 4.7,
-      reviews: 132,
-      image: '/images/placeholder.jpg'
-    }
-  ])
+  const [favoritedProducts, setFavoritedProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const removeFavorite = (id) => {
-    setFavorites(favorites.filter(item => item.id !== id))
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      setLoading(true)
+      // Obtener el usuario del contexto de autenticación si está disponible
+      // const { data: { user } } = await supabase.auth.getUser(); // Ya lo tenemos del contexto
+
+      if (user) {
+        const { data: favoriteEntries, error } = await supabase
+          .from('favoritos')
+          .select('product_id')
+          .eq('user_id', user.id)
+
+        if (error) {
+          console.error('Error fetching favorites:', error)
+          setError('Error al cargar favoritos.')
+        } else if (favoriteEntries) {
+          // Extraer los product_id del resultado de Supabase
+          const favoritedProductIds = favoriteEntries.map(entry => entry.product_id)
+          // Filtrar los productos de ejemplo que coinciden con los IDs favoritos
+          // ¡Usar productosEjemplo en lugar del estado local 'favorites'!'
+          const productsDetails = productosEjemplo.filter(product =>
+            favoritedProductIds.includes(product.id)
+          )
+          setFavoritedProducts(productsDetails)
+        }
+      } else {
+        // Usuario no autenticado, podrías redirigir o mostrar un mensaje
+        // Ya se maneja en el renderizado si !user
+        setFavoritedProducts([]) // Limpiar la lista si no hay usuario
+      }
+      setLoading(false)
+    }
+
+    // Solo ejecutar la carga si el usuario está definido (viene del contexto)
+    if (user !== null) { // Verificar explícitamente si user es null (no solo truthy)
+      fetchFavorites()
+    }
+  }, [user]) // Depender del objeto user del contexto
+
+  const handleRemoveFavorite = async (productIdToRemove) => {
+    if (!user) return
+    setLoading(true)
+
+    const { error } = await supabase
+      .from('favoritos')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('product_id', productIdToRemove)
+
+    if (error) {
+      console.error('Error removing favorite:', error)
+      alert('Error al eliminar producto de favoritos.')
+    } else {
+      setFavoritedProducts(prevProducts =>
+        prevProducts.filter(product => product.id !== productIdToRemove)
+      )
+    }
+    setLoading(false)
   }
 
   if (!user) {
@@ -54,6 +346,14 @@ export default function Favorites() {
         </div>
       </div>
     )
+  }
+
+  if (loading) {
+    return <div className="text-center py-8">Cargando favoritos...</div>
+  }
+
+  if (error) {
+    return <div className="text-center py-8 text-red-600">{error}</div>
   }
 
   return (
@@ -101,56 +401,70 @@ export default function Favorites() {
         <div className="bg-white rounded-lg shadow-md p-6 md:col-span-3">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-gray-800">Mis favoritos</h2>
-            <p className="text-gray-500">{favorites.length} productos</p>
+            <p className="text-gray-500">{favoritedProducts.length} productos</p>
           </div>
           
-          {favorites.length > 0 ? (
+          {favoritedProducts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {favorites.map((item) => (
-                <div key={item.id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200">
-                  <div className="h-48 bg-gray-200 relative">
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      <FiShoppingBag size={48} />
-                    </div>
-                    <button 
-                      onClick={() => removeFavorite(item.id)}
-                      className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200"
+              {favoritedProducts.map((product) => (
+                <motion.div 
+                  key={product.id} 
+                  className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="relative h-48 w-full bg-gray-100">
+                    <Image 
+                      src={product.imagen}
+                      alt={product.nombre}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                    {product.descuento > 0 && (
+                      <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
+                        -{product.descuento}%
+                      </div>
+                    )}
+                    <motion.button
+                      className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-md hover:bg-gray-100 z-10"
+                      onClick={() => handleRemoveFavorite(product.id)}
+                      whileTap={{ scale: 0.9 }}
                       title="Eliminar de favoritos"
                     >
-                      <FiTrash2 className="text-red-500" />
-                    </button>
+                      <FiTrash2 className="w-5 h-5 text-red-600" />
+                    </motion.button>
                   </div>
-                  
-                  <div className="p-4">
-                    <h3 className="font-medium text-gray-800 mb-2">{item.name}</h3>
-                    <p className="text-[#E65100] font-bold mb-2">{item.price.toFixed(2)} €</p>
-                    
-                    <div className="flex items-center mb-3">
-                      <div className="flex text-yellow-400">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 ${i < Math.floor(item.rating) ? 'fill-current' : 'stroke-current fill-none'}`} viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <span className="text-xs text-gray-500 ml-1">({item.reviews})</span>
-                    </div>
-                    
-                    <div className="flex space-x-2">
-                      <Link 
-                        href={`/products/${item.id}`}
-                        className="flex-1 bg-[#E65100] text-white text-center py-2 rounded hover:bg-[#D84315] transition-colors duration-200"
-                      >
-                        Ver detalles
+                  <div className="p-4 flex flex-col justify-between flex-grow">
+                    <div>
+                      <Link href={`/products/${product.id}`}>
+                        <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 hover:text-red-600 transition-colors">{product.nombre}</h3>
                       </Link>
-                      <button 
-                        className="flex-1 border border-[#E65100] text-[#E65100] py-2 rounded hover:bg-[#FFF3E0] transition-colors duration-200"
-                      >
-                        Añadir al carrito
-                      </button>
+                      <div className="mt-2 flex items-baseline">
+                        <span className="text-xl font-bold text-red-600">${product.precio.toFixed(2)}</span>
+                        {product.precioAnterior && (
+                          <span className="ml-2 text-sm text-gray-500 line-through">${product.precioAnterior.toFixed(2)}</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      <div className="flex items-center text-sm text-gray-600 mb-2">
+                        <FiStar className="w-4 h-4 text-yellow-500 fill-current mr-1" />
+                        <span>{product.calificacion} ({product.opiniones} opiniones)</span>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Link href={`/products/${product.id}`} className="flex-1">
+                          <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-md text-sm hover:bg-gray-100 transition-colors">
+                            Ver detalles
+                          </button>
+                        </Link>
+                        <button className="w-full bg-red-600 text-white py-2 rounded-md text-sm hover:bg-red-700 transition-colors">
+                          Añadir al carrito
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           ) : (

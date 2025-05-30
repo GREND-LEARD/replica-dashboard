@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { FiShoppingCart, FiHeart, FiShare2, FiArrowLeft, FiStar, FiTruck, FiShield } from 'react-icons/fi'
 import React from 'react'
+import supabase from '@/lib/supabase'
 
 // Productos de ejemplo
 const productosEjemplo = [
@@ -448,37 +449,71 @@ export default function ProductDetail({ params }) {
   const [colorSeleccionado, setColorSeleccionado] = useState('');
   const [imagenPrincipal, setImagenPrincipal] = useState('');
   const [productosRelacionados, setProductosRelacionados] = useState([]);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Simulamos la carga de datos
+    // Function to fetch product details
     const fetchProducto = () => {
-      setLoading(true);
+      // No establecemos loading aquí para que lo maneje fetchUserAndFavorite
       try {
-        // Convertimos el ID a número para buscar en el array
         const id = parseInt(productId);
         const productoEncontrado = productosEjemplo.find(p => p.id === id);
-        
+
         if (productoEncontrado) {
           setProducto(productoEncontrado);
           setImagenPrincipal(productoEncontrado.imagen);
           if (productoEncontrado.colores && productoEncontrado.colores.length > 0) {
             setColorSeleccionado(productoEncontrado.colores[0]);
           }
-          
-          // Simulamos productos relacionados (simplemente otros productos del array)
+
           setProductosRelacionados(productosEjemplo.filter(p => p.id !== id).slice(0, 4));
         } else {
           setError('Producto no encontrado');
         }
       } catch (err) {
         setError('Error al cargar el producto: ' + err.message);
-      } finally {
-        setLoading(false);
-      }
+      } // finally se maneja en fetchUserAndFavorite
     };
 
-    fetchProducto();
-  }, [productId]);
+    // Function to fetch user and favorite status
+    const fetchUserAndFavorite = async () => {
+        setLoading(true); // Set loading at the beginning of the combined fetch
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
+
+        fetchProducto(); // Fetch product details
+
+        if (user) {
+            const { data, error } = await supabase
+                .from('favoritos')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('product_id', parseInt(productId))
+                .single();
+
+            if (data) {
+                // Si encontramos data, el producto está en favoritos
+                setIsFavorited(true);
+            } else if (error) { // Solo entramos aquí si hay un objeto error
+                // Si hay un error pero no es el de 'no rows found' (que a veces viene como {}) y no es un objeto vacío
+                // considerarlo un error real. La comparación error.length === 0 es un intento de detectar objeto vacío, pero {} no tiene length.
+                // Una forma más robusta es verificar las claves del objeto.
+                const isErrorObjectEmpty = Object.keys(error).length === 0;
+                
+                if (!isErrorObjectEmpty && error.code !== 'PGRST116') {
+                     console.error('Error fetching favorite status:', error);
+                    // Aquí podrías agregar lógica para mostrar un mensaje de error al usuario si lo deseas
+                }
+                 // Si no hay data y el error es vacío o PGRST116, simplemente no está en favoritos (que es el valor inicial de isFavorited)
+            }
+        }
+
+        setLoading(false); // End loading after fetching both
+    };
+
+    fetchUserAndFavorite();
+  }, [productId]); // Dependencia de productId para recargar si cambia la URL
 
   const handleCantidadChange = (e) => {
     const value = parseInt(e.target.value);
@@ -506,6 +541,49 @@ export default function ProductDetail({ params }) {
   const handleAddToCart = () => {
     // Aquí iría la lógica para añadir al carrito
     alert(`Añadido al carrito: ${cantidad} unidades de ${producto.nombre} en color ${colorSeleccionado}`);
+  };
+
+  const handleToggleFavorite = async () => {
+      if (!user) {
+          // Redirigir al login o mostrar mensaje
+          alert('Debes iniciar sesión para añadir a favoritos.');
+          router.push('/login');
+          return;
+      }
+
+      setLoading(true); // Opcional: mostrar estado de carga mientras se actualiza
+      const productIntId = parseInt(productId);
+
+      if (isFavorited) {
+          // Eliminar de favoritos
+          const { error } = await supabase
+              .from('favoritos')
+              .delete()
+              .eq('user_id', user.id)
+              .eq('product_id', productIntId);
+
+          if (error) {
+              console.error('Error removing from favorites:', error);
+              alert('Error al eliminar de favoritos.');
+          } else {
+              setIsFavorited(false);
+          }
+      } else {
+          // Añadir a favoritos
+          const { error } = await supabase
+              .from('favoritos')
+              .insert([
+                  { user_id: user.id, product_id: productIntId }
+              ]);
+
+          if (error) {
+              console.error('Error adding to favorites:', error);
+              alert('Error al añadir a favoritos.');
+          } else {
+              setIsFavorited(true);
+          }
+      }
+      setLoading(false); // Opcional: ocultar estado de carga
   };
 
   if (loading) {
@@ -607,8 +685,12 @@ export default function ProductDetail({ params }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
-                  <FiHeart className="w-6 h-6 text-gray-600" />
+                <button 
+                  className={`p-2 rounded-full transition-colors duration-200 ${isFavorited ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'}`}
+                  onClick={handleToggleFavorite}
+                  disabled={loading}
+                >
+                  <FiHeart className="w-6 h-6" />
                 </button>
                 <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
                   <FiShare2 className="w-6 h-6 text-gray-600" />
