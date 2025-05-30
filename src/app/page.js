@@ -44,7 +44,7 @@ const productosEjemplo = [
     nombre: 'Funda de Silicona para iPhone',
     precio: 9.99,
     precioAnterior: 14.99,
-    imagen: 'https://images.unsplash.com/photo-1585060544211-7ad8b450a730?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=500&q=60',
     ventas: 1500,
     descuento: 33,
     envioGratis: false,
@@ -74,7 +74,7 @@ const productosEjemplo = [
     nombre: 'Teclado Mecánico RGB',
     precio: 49.99,
     precioAnterior: 79.99,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=500&q=60',
     ventas: 420,
     descuento: 38,
     envioGratis: true,
@@ -104,7 +104,7 @@ const productosEjemplo = [
     nombre: 'Organizador de Escritorio',
     precio: 22.99,
     precioAnterior: 29.99,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=60',
     ventas: 340,
     descuento: 23,
     envioGratis: false,
@@ -144,7 +144,7 @@ const productosEjemplo = [
     nombre: 'Mesa Auxiliar Moderna',
     precio: 55.00,
     precioAnterior: 75.00,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1532372320572-cda25653a26f?auto=format&fit=crop&w=500&q=60',
     ventas: 180,
     descuento: 27,
     envioGratis: false,
@@ -154,7 +154,7 @@ const productosEjemplo = [
     nombre: 'Kit de Herramientas Básico',
     precio: 40.00,
     precioAnterior: 60.00,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?auto=format&fit=crop&w=500&q=60',
     ventas: 310,
     descuento: 33,
     envioGratis: true,
@@ -164,7 +164,7 @@ const productosEjemplo = [
     nombre: 'Juego de Sartenes Antiadherentes',
     precio: 75.00,
     precioAnterior: 100.00,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=500&q=60',
     ventas: 450,
     descuento: 25,
     envioGratis: true,
@@ -174,7 +174,7 @@ const productosEjemplo = [
     nombre: 'Set de Cuchillos de Cocina',
     precio: 60.00,
     precioAnterior: 80.00,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1584990347449-a2d4c2c9c0e8?auto=format&fit=crop&w=500&q=60',
     ventas: 290,
     descuento: 25,
     envioGratis: true,
@@ -184,7 +184,7 @@ const productosEjemplo = [
     nombre: 'Tabla de Cortar de Bambú',
     precio: 25.00,
     precioAnterior: 35.00,
-    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1584990347449-a2d4c2c9c0e8?auto=format&fit=crop&w=500&q=60',
     ventas: 520,
     descuento: 28,
     envioGratis: false,
@@ -194,7 +194,7 @@ const productosEjemplo = [
     nombre: 'Cámara de Seguridad WiFi',
     precio: 45.99,
     precioAnterior: 69.99,
-    imagen: 'https://images.unsplash.com/photo-1587502536263-2c3a2d9e7d09?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1557324232-b8917d3f3aa1?auto=format&fit=crop&w=500&q=60',
     ventas: 530,
     descuento: 34,
     envioGratis: true,
@@ -211,12 +211,12 @@ const productosEjemplo = [
   },
   {
     id: 21,
-    nombre: 'Pulsera Inteligente de Actividad',
-    precio: 25.50,
-    precioAnterior: 39.99,
-    imagen: 'https://images.unsplash.com/photo-1565372919416-bc6ff8d53c8a?auto=format&fit=crop&w=500&q=60',
-    ventas: 1020,
-    descuento: 36,
+    nombre: 'Ratón Inalámbrico Ergonómico',
+    precio: 20.00,
+    precioAnterior: 30.00,
+    imagen: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=500&q=60',
+    ventas: 300,
+    descuento: 33,
     envioGratis: false,
   },
   {
@@ -224,7 +224,7 @@ const productosEjemplo = [
     nombre: 'Plancha de Vapor para Ropa',
     precio: 40.00,
     precioAnterior: 65.00,
-    imagen: 'https://images.unsplash.com/photo-1556909192-22b251367007?auto=format&fit=crop&w=500&q=60',
+    imagen: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=500&q=60',
     ventas: 380,
     descuento: 38,
     envioGratis: true,
@@ -430,7 +430,7 @@ export default function Home() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.3 }}
               >
-                <Image src="https://images.unsplash.com/photo-1612837017391-4b6b7b0b2b0b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdpZnR8ZW58MHx8MHx8fDA%3D" alt="Regalo" width={80} height={80} className="mr-3 rounded" />
+                <Image src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=500&auto=format&fit=crop&q=60" alt="Regalo" width={80} height={80} className="mr-3 rounded" />
                 <div>
                   <p className="font-bold">Cupón de $5</p>
                   <p className="text-xs">Para nuevos usuarios</p>
@@ -443,7 +443,7 @@ export default function Home() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.4 }}
               >
-                <Image src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2lmdHxlbnwwfHwwfHx8MA%3D%3D" alt="Regalo" width={80} height={80} className="mr-3 rounded" />
+                <Image src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=500&auto=format&fit=crop&q=60" alt="Regalo" width={80} height={80} className="mr-3 rounded" />
                 <div>
                   <p className="font-bold">15% descuento</p>
                   <p className="text-xs">En tu próxima compra</p>
