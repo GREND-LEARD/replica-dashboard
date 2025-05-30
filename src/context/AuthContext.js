@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
     return () => {
       subscription?.unsubscribe()
     }
-  }, [supabase])
+  }, [])
 
   // Función para cerrar sesión
   const signOut = async () => {

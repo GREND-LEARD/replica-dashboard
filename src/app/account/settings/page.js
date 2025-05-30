@@ -276,7 +276,7 @@ export default function Settings() {
           <div className="mt-12 border-t pt-6">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">Cambiar contraseña</h3>
             <p className="text-gray-600 mb-4">
-              Para cambiar tu contraseña, primero debes cerrar sesión y usar la opción "¿Olvidaste tu contraseña?" en la página de inicio de sesión.
+              Para cambiar tu contraseña, primero debes cerrar sesión y usar la opción &ldquo;¿Olvidaste tu contraseña?&rdquo; en la página de inicio de sesión.
             </p>
             <button 
               onClick={signOut}

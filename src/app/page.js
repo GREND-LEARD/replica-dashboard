@@ -224,7 +224,7 @@ export default function Home() {
       setBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [banners.length]);
 
   // Variantes para animaciones
   const containerVariants = {
