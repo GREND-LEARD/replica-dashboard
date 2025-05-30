@@ -15,7 +15,7 @@ const productosEjemplo = [
     nombre: 'Auriculares Bluetooth',
     precio: 19.99,
     precioAnterior: 39.99,
-    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D',
+    imagen: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=60',
     ventas: 1200,
     descuento: 50,
     envioGratis: true,
@@ -36,7 +36,7 @@ const productosEjemplo = [
     nombre: 'Smartwatch Deportivo',
     precio: 29.99,
     precioAnterior: 49.99,
-    imagen: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2R1Y3R8ZW58MHx8MHx8fDA%3D',
+    imagen: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=60',
     ventas: 890,
     descuento: 40,
     envioGratis: true,
@@ -52,7 +52,386 @@ const productosEjemplo = [
     calificacion: 4.3,
     opiniones: 245
   },
-  // Más productos...
+  {
+    id: 3,
+    nombre: 'Cargador Inalámbrico',
+    precio: 15.99,
+    precioAnterior: 24.99,
+    imagen: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=500&q=60',
+    ventas: 560,
+    descuento: 36,
+    envioGratis: false,
+    descripcion: 'Cargador inalámbrico rápido compatible con múltiples dispositivos. Diseño compacto y elegante, ideal para el hogar o la oficina.',
+    caracteristicas: [
+      'Carga rápida de 15W',
+      'Compatible con Qi',
+      'Indicador LED',
+      'Protección contra sobrecalentamiento'
+    ],
+    colores: ['Negro', 'Blanco'],
+    calificacion: 4.0,
+    opiniones: 180
+  },
+  {
+    id: 4,
+    nombre: 'Funda de Silicona para iPhone',
+    precio: 9.99,
+    precioAnterior: 14.99,
+    imagen: 'https://images.unsplash.com/photo-1585060544211-7ad8b450a730?auto=format&fit=crop&w=500&q=60',
+    ventas: 1500,
+    descuento: 33,
+    envioGratis: false,
+    descripcion: 'Funda de silicona suave para iPhone con ajuste perfecto y protección contra caídas. Disponible en varios colores vibrantes.',
+    caracteristicas: [
+      'Material de silicona suave',
+      'Protección contra caídas',
+      'Acceso a todos los puertos',
+      'Acabado antideslizante'
+    ],
+    colores: ['Rojo', 'Azul', 'Verde', 'Rosa', 'Negro'],
+    calificacion: 4.7,
+    opiniones: 450
+  },
+  {
+    id: 5,
+    nombre: 'Lámpara LED de Escritorio',
+    precio: 24.99,
+    precioAnterior: 39.99,
+    imagen: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=500&q=60',
+    ventas: 320,
+    descuento: 38,
+    envioGratis: true,
+    descripcion: 'Lámpara LED de escritorio con brazos ajustables y múltiples niveles de brillo. Ideal para leer, estudiar o trabajar.',
+    caracteristicas: [
+      'Iluminación LED regulable',
+      'Brazos ajustables',
+      'Base estable',
+      'Bajo consumo de energía'
+    ],
+    colores: ['Negro', 'Blanco', 'Plata'],
+    calificacion: 4.2,
+    opiniones: 120
+  },
+  {
+    id: 6,
+    nombre: 'Mochila Impermeable',
+    precio: 32.99,
+    precioAnterior: 45.99,
+    imagen: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=60',
+    ventas: 750,
+    descuento: 28,
+    envioGratis: true,
+    descripcion: 'Mochila impermeable duradera con múltiples compartimentos. Perfecta para viajes, senderismo o uso diario en cualquier clima.',
+    caracteristicas: [
+      'Material impermeable',
+      'Gran capacidad',
+      'Correas acolchadas',
+      'Compartimento para laptop'
+    ],
+    colores: ['Negro', 'Azul Marino', 'Gris'],
+    calificacion: 4.6,
+    opiniones: 280
+  },
+  {
+    id: 7,
+    nombre: 'Teclado Mecánico RGB',
+    precio: 49.99,
+    precioAnterior: 79.99,
+    imagen: 'https://images.unsplash.com/photo-1616400619175-5bd4f5c83367?auto=format&fit=crop&w=500&q=60',
+    ventas: 420,
+    descuento: 38,
+    envioGratis: true,
+    descripcion: 'Teclado mecánico con retroiluminación RGB personalizable y switches táctiles. Ideal para gaming y escritura.',
+    caracteristicas: [
+      'Switches mecánicos',
+      'Retroiluminación RGB',
+      'Anti-ghosting',
+      'Diseño duradero'
+    ],
+    colores: ['Negro', 'Blanco'],
+    calificacion: 4.5,
+    opiniones: 150
+  },
+  {
+    id: 8,
+    nombre: 'Botella de Agua Térmica',
+    precio: 18.99,
+    precioAnterior: 27.99,
+    imagen: 'https://images.unsplash.com/photo-1591090504758-d99f363a80c8?auto=format&fit=crop&w=500&q=60',
+    ventas: 980,
+    descuento: 32,
+    envioGratis: false,
+    descripcion: 'Botella de agua térmica de doble pared que mantiene tus bebidas frías o calientes por horas. Ideal para llevar al gimnasio, oficina o exteriores.',
+    caracteristicas: [
+      'Aislamiento de doble pared',
+      'Acero inoxidable',
+      'Libre de BPA',
+      'Capacidad de 500ml'
+    ],
+    colores: ['Negro', 'Plata', 'Azul', 'Rosa'],
+    calificacion: 4.8,
+    opiniones: 510
+  },
+  {
+    id: 9,
+    nombre: 'Zapatillas Deportivas',
+    precio: 59.99,
+    precioAnterior: 89.99,
+    imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=60',
+    ventas: 1100,
+    descuento: 33,
+    envioGratis: true,
+    descripcion: 'Zapatillas deportivas ligeras y transpirables para correr y entrenar. Suela con gran amortiguación para mayor comodidad.',
+    caracteristicas: [
+      'Tejido transpirable',
+      'Suela con amortiguación',
+      'Diseño ligero',
+      'Ajuste cómodo'
+    ],
+    colores: ['Negro', 'Blanco', 'Rojo'],
+    calificacion: 4.7,
+    opiniones: 620
+  },
+  {
+    id: 10,
+    nombre: 'Organizador de Escritorio',
+    precio: 22.99,
+    precioAnterior: 29.99,
+    imagen: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=60',
+    ventas: 340,
+    descuento: 23,
+    envioGratis: false,
+    descripcion: 'Organizador multifuncional para mantener tu escritorio ordenado. Múltiples compartimentos para bolígrafos, notas y pequeños accesorios.',
+    caracteristicas: [
+      'Múltiples compartimentos',
+      'Material resistente',
+      'Diseño compacto',
+      'Ideal para oficina y hogar'
+    ],
+    colores: ['Negro', 'Blanco', 'Gris'],
+    calificacion: 4.1,
+    opiniones: 90
+  },
+  {
+    id: 11,
+    nombre: 'Altavoz Bluetooth Portátil',
+    precio: 39.99,
+    precioAnterior: 59.99,
+    imagen: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=60',
+    ventas: 670,
+    descuento: 33,
+    envioGratis: true,
+    descripcion: 'Altavoz Bluetooth con sonido potente y batería de larga duración. Resistente al agua, perfecto para exteriores y fiestas.',
+    caracteristicas: [
+      'Sonido de alta fidelidad',
+      'Bluetooth 5.0',
+      'Batería de 15 horas',
+      'Resistente al agua IPX6'
+    ],
+    colores: ['Negro', 'Azul', 'Rojo'],
+    calificacion: 4.4,
+    opiniones: 210
+  },
+  {
+    id: 12,
+    nombre: 'Set de Pinceles de Maquillaje',
+    precio: 14.99,
+    precioAnterior: 24.99,
+    imagen: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=500&q=60',
+    ventas: 890,
+    descuento: 40,
+    envioGratis: false,
+    descripcion: 'Set completo de pinceles de maquillaje profesionales para rostro y ojos. Cerdas suaves y de alta calidad para una aplicación perfecta.',
+    caracteristicas: [
+      'Set de 12 pinceles',
+      'Cerdas sintéticas',
+      'Mango ergonómico',
+      'Incluye estuche de viaje'
+    ],
+    colores: ['Rosa', 'Negro', 'Blanco'],
+    calificacion: 4.6,
+    opiniones: 350
+  },
+  {
+    id: 13,
+    nombre: 'Silla Ergonómica de Oficina',
+    precio: 120.00,
+    precioAnterior: 180.00,
+    imagen: 'https://images.unsplash.com/photo-1591090504758-d99f363a80c8?auto=format&fit=crop&w=500&q=60',
+    ventas: 250,
+    descuento: 33,
+    envioGratis: true,
+    descripcion: 'Silla de oficina ergonómica con soporte lumbar ajustable y reposacabezas. Ideal para largas horas de trabajo.',
+    caracteristicas: [
+      'Soporte lumbar ajustable',
+      'Reposacabezas',
+      'Altura regulable',
+      'Base giratoria'
+    ],
+    colores: ['Negro', 'Gris'],
+    calificacion: 4.3,
+    opiniones: 110
+  },
+  {
+    id: 14,
+    nombre: 'Mesa Auxiliar de Noche',
+    precio: 55.00,
+    precioAnterior: 75.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 180,
+    descuento: 27,
+    envioGratis: false,
+    descripcion: 'Mesa auxiliar moderna ideal para la sala o como mesita de noche. Diseño minimalista y fácil montaje.',
+    caracteristicas: [
+      'Diseño moderno',
+      'Material resistente',
+      'Fácil montaje',
+      'Tamaño compacto'
+    ],
+    colores: ['Blanco', 'Negro', 'Madera'],
+    calificacion: 4.0,
+    opiniones: 75
+  },
+  {
+    id: 15,
+    nombre: 'Kit de Herramientas Esencial',
+    precio: 40.00,
+    precioAnterior: 60.00,
+    imagen: 'https://images.unsplash.com/photo-1600966294595-61f5297571e1?auto=format&fit=crop&w=500&q=60',
+    ventas: 310,
+    descuento: 33,
+    envioGratis: true,
+    descripcion: 'Kit de herramientas básicas para reparaciones en el hogar. Incluye martillo, destornilladores, alicates y cinta métrica.',
+    caracteristicas: [
+      'Kit de 18 piezas',
+      'Estuche organizador',
+      'Herramientas duraderas',
+      'Ideal para el hogar'
+    ],
+    colores: ['Rojo', 'Azul'],
+    calificacion: 4.5,
+    opiniones: 140
+  },
+  {
+    id: 16,
+    nombre: 'Juego de Sartenes Antiadherentes',
+    precio: 75.00,
+    precioAnterior: 100.00,
+    imagen: 'https://images.unsplash.com/photo-1610741095148-558656307dfc?auto=format&fit=crop&w=500&q=60',
+    ventas: 450,
+    descuento: 25,
+    envioGratis: true,
+    descripcion: 'Set de 3 sartenes antiadherentes de diferentes tamaños. Cocina sin que se pegue y limpia fácilmente.',
+    caracteristicas: [
+      'Set de 3 sartenes',
+      'Recubrimiento antiadherente',
+      'Mangos ergonómicos',
+      'Aptas para lavavajillas'
+    ],
+    colores: ['Negro', 'Gris'],
+    calificacion: 4.6,
+    opiniones: 200
+  },
+  {
+    id: 17,
+    nombre: 'Set de Cuchillos de Cocina Profesionales',
+    precio: 60.00,
+    precioAnterior: 80.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 290,
+    descuento: 25,
+    envioGratis: true,
+    descripcion: 'Set de cuchillos de cocina de acero inoxidable de alta calidad. Incluye cuchillo de chef, pan, multiusos y pelador.',
+    caracteristicas: [
+      'Acero inoxidable',
+      'Mango ergonómico',
+      'Alta precisión',
+      'Fácil de afilar'
+    ],
+    colores: ['Plata'],
+    calificacion: 4.4,
+    opiniones: 130
+  },
+  {
+    id: 18,
+    nombre: 'Tabla de Cortar de Bambú',
+    precio: 25.00,
+    precioAnterior: 35.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 520,
+    descuento: 28,
+    envioGratis: false,
+    descripcion: 'Tabla de cortar de bambú ecológica y duradera. Superficie resistente a cortes y fácil de limpiar.',
+    caracteristicas: [
+      'Material de bambú',
+      'Resistente a cortes',
+      'Fácil de limpiar',
+      'Ecológica'
+    ],
+    colores: ['Bambú'],
+    calificacion: 4.7,
+    opiniones: 190
+  },
+  {
+    id: 19,
+    nombre: 'Soporte para Laptop Ajustable',
+    precio: 30.00,
+    precioAnterior: 40.00,
+    imagen: 'https://images.unsplash.com/photo-1593642632823-02e7900c4988?auto=format&fit=crop&w=500&q=60',
+    ventas: 150,
+    descuento: 25,
+    envioGratis: false,
+    descripcion: 'Soporte ajustable para laptop que mejora la postura y ventilación. Ligero y portátil.',
+    caracteristicas: [
+      'Altura ajustable',
+      'Diseño plegable',
+      'Mejora la ventilación',
+      'Material de aluminio'
+    ],
+    colores: ['Plata', 'Gris'],
+    calificacion: 4.4,
+    opiniones: 80
+  },
+  {
+    id: 20,
+    nombre: 'Webcam Full HD 1080p',
+    precio: 45.00,
+    precioAnterior: 60.00,
+    imagen: 'https://images.unsplash.com/photo-1564468960512-71a50f303b31?auto=format&fit=crop&w=500&q=60',
+    ventas: 200,
+    descuento: 25,
+    envioGratis: true,
+    descripcion: 'Webcam con resolución Full HD 1080p para videollamadas nítidas. Micrófono incorporado y fácil instalación.',
+    caracteristicas: [
+      'Resolución 1080p',
+      'Micrófono integrado',
+      'Clip universal',
+      'Plug and Play'
+    ],
+    colores: ['Negro'],
+    calificacion: 4.2,
+    opiniones: 70
+  },
+  {
+    id: 21,
+    nombre: 'Ratón Inalámbrico Ergonómico',
+    precio: 20.00,
+    precioAnterior: 30.00,
+    imagen: 'https://images.unsplash.com/photo-1587477000000-000000000000?auto=format&fit=crop&w=500&q=60',
+    ventas: 300,
+    descuento: 33,
+    envioGratis: false,
+    descripcion: 'Ratón inalámbrico con diseño ergonómico para comodidad durante todo el día. Conexión USB estable.',
+    caracteristicas: [
+      'Diseño ergonómico',
+      'Conexión inalámbrica 2.4GHz',
+      'Sensor óptico preciso',
+      'Compatible con Windows y Mac'
+    ],
+    colores: ['Negro', 'Gris'],
+    calificacion: 4.5,
+    opiniones: 110
+  },
 ];
 
 export default function ProductDetail({ params }) {
