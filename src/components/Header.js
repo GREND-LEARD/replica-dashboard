@@ -18,7 +18,7 @@ export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const debounceTimeout = useRef(null)
   
-  // Obtener el usuario del contexto de autenticación
+  
   const { user, signOut } = useAuth()
 
   // Función para manejar el cierre de sesión
@@ -31,7 +31,7 @@ export default function Header() {
     }
   }
 
-  // Función para obtener el nombre de usuario para mostrar
+  // Función  nombre de usuario para mostrar
   const getUserDisplayName = () => {
     if (!user) return 'Invitado'
     
