@@ -6,7 +6,7 @@ export default function CategoryNav() {
   // Categorías con iconos para un aspecto más similar a Temu
   const categories = [
     { name: 'Artículos más vendidos', href: '#', icon: '🔥' },
-    { name: '5 estrellas', href: '#', icon: '⭐' },
+    { name: '5 ESTRELLAS', href: '#', icon: '⭐' },
     { name: 'Semana Black', href: '#', icon: '🏷️' },
     { name: 'Lo nuevo', href: '#', icon: '🆕' },
     { name: 'Moda de Mujer', href: '#', icon: '👚' },
