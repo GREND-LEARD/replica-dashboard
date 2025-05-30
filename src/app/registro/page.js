@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createClientClient } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -12,7 +12,6 @@ export default function Registro() {
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null)
   const router = useRouter()
-  const supabase = createClientClient()
 
   const handleSignUp = async (e) => {
     e.preventDefault()

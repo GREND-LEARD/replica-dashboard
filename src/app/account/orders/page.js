@@ -116,11 +116,11 @@ export default function Orders() {
                 <div key={order.id} className="border rounded-lg overflow-hidden">
                   <div className="bg-gray-50 p-4 flex justify-between items-center">
                     <div>
-                      <p className="font-medium">Pedido #{order.id}</p>
-                      <p className="text-sm text-gray-500">Fecha: {order.date}</p>
+                      <p className="font-medium text-gray-800">Pedido #{order.id}</p>
+                      <p className="text-sm text-gray-700">Fecha: {order.date}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">Total: {order.total.toFixed(2)} €</p>
+                      <p className="font-medium text-gray-800">Total: {order.total.toFixed(2)} €</p>
                       <span className="inline-block px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
                         {order.status}
                       </span>
@@ -128,7 +128,7 @@ export default function Orders() {
                   </div>
                   
                   <div className="p-4">
-                    <h3 className="font-medium mb-2">Productos</h3>
+                    <h3 className="font-medium mb-2 text-gray-800">Productos</h3>
                     <div className="space-y-4">
                       {order.items.map((item) => (
                         <div key={item.id} className="flex items-center">
@@ -138,13 +138,13 @@ export default function Orders() {
                             </div>
                           </div>
                           <div className="ml-4 flex-grow">
-                            <p className="font-medium">{item.name}</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="font-medium text-gray-800">{item.name}</p>
+                            <p className="text-sm text-gray-700">
                               {item.quantity} x {item.price.toFixed(2)} €
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="font-medium">{(item.quantity * item.price).toFixed(2)} €</p>
+                            <p className="font-medium text-gray-800">{(item.quantity * item.price).toFixed(2)} €</p>
                           </div>
                         </div>
                       ))}

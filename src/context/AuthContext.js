@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { createClientClient } from '@/lib/supabase'
+import supabase from '@/lib/supabase'
 
 // Crear el contexto de autenticación
 const AuthContext = createContext()
@@ -19,7 +19,6 @@ export const useAuth = () => {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClientClient()
 
   // Cargar usuario al iniciar y configurar listener para cambios de autenticación
   useEffect(() => {

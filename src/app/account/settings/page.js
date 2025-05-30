@@ -96,7 +96,7 @@ export default function Settings() {
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Sidebar de navegación */}
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="bg-white rounded-lg shadow-md p-4 h-fit">
           <div className="flex flex-col space-y-2">
             <Link 
               href="/account/dashboard"
@@ -158,7 +158,7 @@ export default function Settings() {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E65100] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-800"
                 />
               </div>
               
@@ -172,7 +172,7 @@ export default function Settings() {
                   name="email"
                   value={formData.email}
                   disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-800"
                 />
                 <p className="text-xs text-gray-500 mt-1">El email no se puede cambiar</p>
               </div>
@@ -187,7 +187,7 @@ export default function Settings() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E65100] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-800"
                 />
               </div>
               
@@ -201,7 +201,7 @@ export default function Settings() {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E65100] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-800"
                 />
               </div>
               
@@ -215,7 +215,7 @@ export default function Settings() {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E65100] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-800"
                 />
               </div>
               
@@ -229,7 +229,7 @@ export default function Settings() {
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E65100] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-800"
                 />
               </div>
               
@@ -242,7 +242,7 @@ export default function Settings() {
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#E65100] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-800"
                 >
                   <option value="España">España</option>
                   <option value="Portugal">Portugal</option>

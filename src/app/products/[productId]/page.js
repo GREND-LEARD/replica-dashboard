@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { FiShoppingCart, FiHeart, FiShare2, FiArrowLeft, FiStar, FiTruck, FiShield } from 'react-icons/fi'
+import React from 'react'
 
 // Productos de ejemplo
 const productosEjemplo = [
@@ -56,7 +57,10 @@ const productosEjemplo = [
 
 export default function ProductDetail({ params }) {
   const router = useRouter();
-  const { productId } = params;
+  
+  // Usar React.use() para acceder a los parámetros de forma segura
+  const unwrappedParams = React.use(params);
+  const { productId } = unwrappedParams;
   
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);

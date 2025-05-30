@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -16,6 +16,7 @@ export default function Header() {
   const [visible, setVisible] = useState(true)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const debounceTimeout = useRef(null)
   
   // Obtener el usuario del contexto de autenticación
   const { user, signOut } = useAuth()
@@ -67,8 +68,22 @@ export default function Header() {
       setPrevScrollPos(currentScrollPos)
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const debouncedHandleScroll = () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current)
+      }
+      debounceTimeout.current = setTimeout(() => {
+        handleScroll()
+      }, 50) // Ajusta el tiempo de debounce si es necesario (50ms es un buen punto de partida)
+    }
+
+    window.addEventListener('scroll', debouncedHandleScroll)
+    return () => {
+      window.removeEventListener('scroll', debouncedHandleScroll)
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current)
+      }
+    }
   }, [prevScrollPos])
 
   const handleSearchChange = (e) => {
